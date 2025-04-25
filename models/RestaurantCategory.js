@@ -6,7 +6,8 @@ const restaurantCategorySchema = new mongoose.Schema({
     type: String,
     enum: ["news", "event", "restaurant"],
   },
-  icon: String, //optional, designed to use for category icon, on the map
+  icon: String,
+  isDeleted: { type: Boolean, default: false },
 });
 
 const RestaurantCategory = mongoose.model(

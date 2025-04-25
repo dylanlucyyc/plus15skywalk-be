@@ -39,6 +39,7 @@ const postSchema = new mongoose.Schema({
       enum: ["$", "$$", "$$$", "$$$$"],
     },
   },
+  isDeleted: { type: Boolean, default: false },
 });
 
 const Post = mongoose.model("Post", postSchema);

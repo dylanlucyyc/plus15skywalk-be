@@ -12,6 +12,7 @@ const favoriteSchema = new mongoose.Schema({
     required: true,
   },
   created_at: { type: Date, default: Date.now },
+  isDeleted: { type: Boolean, default: false },
 });
 
 const Favorite = mongoose.model("Favorite", favoriteSchema);

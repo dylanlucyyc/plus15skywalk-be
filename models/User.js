@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema({
   password_hash: { type: String, required: true },
   avatar_url: String,
   created_at: { type: Date, default: Date.now },
+  isDeleted: { type: Boolean, default: false },
 });
 
 const User = mongoose.model("User", userSchema);
