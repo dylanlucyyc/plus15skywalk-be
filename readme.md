@@ -6,9 +6,9 @@ The +15 Skywalk is a network of elevated, climate-controlled pedestrian walkways
 
 It allows people to move comfortably between offices, shopping centers, hotels, and public buildings, especially useful during Calgary’s harsh winters. Originally developed in the 1970s, the +15 has become an iconic part of the city’s infrastructure, helping reduce street-level congestion while promoting convenience and accessibility downtown.
 
-## What problem does your application solve?
+## What problem does this application solve?
 
-Our website is a digital hub for Calgary’s +15 Skywalk system. It offers real-time information on news, events, and hospitality services connected to the +15 network. Designed for both locals and visitors, the site helps users easily navigate the extensive skywalk system, stay informed about downtown happenings, and discover nearby cafes, shops, and amenities, all in one place. At its core, the platform bridges the physical network of the +15 with a modern, intuitive digital experience.
+This website is a digital hub for Calgary’s +15 Skywalk system. It offers real-time information on news, events, and hospitality services connected to the +15 network. Designed for both locals and visitors, the site helps users easily navigate the extensive skywalk system, stay informed about downtown happenings, and discover nearby cafes, shops, and amenities, all in one place. At its core, the platform bridges the physical network of the +15 with a modern, intuitive digital experience.
 
 ## What features contribute to solving given issues?
 
@@ -58,7 +58,7 @@ Users can sign up by providing a name, email, and password. The email must be un
 
 The platform also features a basic Events section and news updates relevant to the +15 system. While real-time data is not available, the site simulates how future features like walkway closure alerts, traffic levels, and accessibility tools could be integrated.
 
-In future versions, +15 Connect could expand user profiles to include saved routes, accessibility preferences, and notification settings for event updates or closures.
+In future versions, +15 Connect could expand user profiles to include saved routes, accessibility preferences, and notification settings for event updates or closures. Additionally, I am also planning to implement the UI for the CMS system to further optimize the data input process.
 
 ---
 
