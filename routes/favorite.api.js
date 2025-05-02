@@ -4,8 +4,7 @@ const {
   createFavorite,
   getAllFavorites,
   getFavoriteById,
-  updateFavoriteById,
-  deleteFavoriteById,
+  deleteFavorite,
   deleteFavoriteByPostId,
 } = require("../controllers/favorite.controllers.js");
 const { loginRequired } = require("../middlewares/auth.middleware.js");
@@ -32,18 +31,11 @@ router.get("/", loginRequired, getAllFavorites);
 router.get("/:id", loginRequired, getFavoriteById);
 
 /**
- * @route PUT api/favorites/:id
- * @description Update favorite by id
- * @access Private
- */
-router.put("/:id", loginRequired, updateFavoriteById);
-
-/**
  * @route DELETE api/favorites/:id
  * @description Delete favorite by id
  * @access Private
  */
-router.delete("/:id", loginRequired, deleteFavoriteById);
+router.delete("/:id", loginRequired, deleteFavorite);
 
 /**
  * @route DELETE api/favorites/post/:post_id

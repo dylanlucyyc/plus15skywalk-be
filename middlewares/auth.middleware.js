@@ -2,9 +2,7 @@ const { AppError } = require("../helpers/utils.js");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User.js");
 
-const authMiddleware = {};
-
-authMiddleware.loginRequired = async (req, res, next) => {
+const loginRequired = async (req, res, next) => {
   try {
     const tokenString = req.headers.authorization;
 
@@ -40,4 +38,4 @@ authMiddleware.loginRequired = async (req, res, next) => {
   }
 };
 
-module.exports = authMiddleware;
+module.exports = { loginRequired };
