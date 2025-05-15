@@ -4,45 +4,24 @@ const userController = require("../controllers/user.controllers.js");
 const { loginRequired } = require("../middlewares/auth.middleware.js");
 
 /**
- * @route POST api/users
- * @description Create a new user
+ * @route POST /api/user/register
+ * @description Register a new user
  * @access Public
  */
-router.post("/", userController.createUser);
+router.post("/register", userController.register);
 
 /**
- * @route GET api/users
- * @description Get list of users
- * @access Private (Admin only)
+ * @route POST /api/user/login
+ * @description Login with email and password
+ * @access Public
  */
-router.get("/", loginRequired, userController.getAllUsers);
+router.post("/login", userController.login);
 
 /**
- * @route GET api/users/me
+ * @route GET /api/user/me
  * @description Get current user profile
  * @access Private
  */
 router.get("/me", loginRequired, userController.getCurrentUser);
-
-/**
- * @route GET api/users/:id
- * @description Get user by id
- * @access Private
- */
-router.get("/:id", loginRequired, userController.getUserById);
-
-/**
- * @route PUT api/users/:id
- * @description Update user by id
- * @access Private
- */
-router.put("/:id", loginRequired, userController.updateUser);
-
-/**
- * @route DELETE api/users/:id
- * @description Delete user by id
- * @access Private
- */
-router.delete("/:id", loginRequired, userController.deleteUser);
 
 module.exports = router;
