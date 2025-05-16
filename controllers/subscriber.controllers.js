@@ -9,12 +9,12 @@ subscriberController.create = async (req, res, next) => {
 
   try {
     if (!email) {
-      throw new AppError(400, "Bad Request", "Email is required");
+      throw new AppError(400, "Email is required", "Bad Request");
     }
 
     const existingSubscriber = await Subscriber.findOne({ email });
     if (existingSubscriber) {
-      throw new AppError(400, "Bad Request", "Email already exists");
+      throw new AppError(400, "Email already exists", "Bad Request");
     }
 
     const newSubscriber = new Subscriber({ email });
