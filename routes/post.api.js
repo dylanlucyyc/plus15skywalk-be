@@ -6,6 +6,7 @@ const {
   getPostById,
   updatePost,
   deletePost,
+  getPostBySlug,
 } = require("../controllers/post.controllers.js");
 const { loginRequired } = require("../middlewares/auth.middleware.js");
 
@@ -43,5 +44,7 @@ router.put("/:id", loginRequired, updatePost);
  * @access Private
  */
 router.delete("/:id", loginRequired, deletePost);
+
+router.get("/slug/:slug", getPostBySlug);
 
 module.exports = router;

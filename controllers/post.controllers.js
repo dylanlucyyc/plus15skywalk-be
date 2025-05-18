@@ -51,14 +51,55 @@ postController.createPost = async (req, res, next) => {
 
 //Get All Posts
 postController.getAllPosts = async (req, res, next) => {
-  const filter = { isDeleted: false };
-  const { post_type, category } = req.query;
-
   try {
+    const filter = { isDeleted: false };
+    const {
+      post_type,
+      category,
+      page = 1,
+      per_page = 10,
+      filter: filterType = "all",
+      sort = "newest",
+      search,
+    } = req.query;
+
+    // Apply filters
     if (post_type) filter.post_type = post_type;
     if (category) filter.category = category;
+    if (search) {
+      filter.title = { $regex: search, $options: "i" }; // Case-insensitive search
+    }
 
+    // Pagination setup
+    const perPage = parseInt(per_page);
+    const currentPage = parseInt(page);
+    const skip = (currentPage - 1) * perPage;
+
+    // Sort configuration
+    let sortOption = {};
+    if (sort === "newest") {
+      sortOption = { created_at: -1 };
+    } else if (sort === "oldest") {
+      sortOption = { created_at: 1 };
+    } else if (sort === "a-z") {
+      sortOption = { title: 1 };
+    } else if (sort === "z-a") {
+      sortOption = { title: -1 };
+    }
+
+    // Get total count for pagination metadata
+    const totalPosts = await Post.countDocuments(filter);
+    const totalPages = totalPosts > 0 ? Math.ceil(totalPosts / perPage) : 0;
+
+    // Ensure current page doesn't exceed total pages
+    const validCurrentPage = Math.min(currentPage, Math.max(1, totalPages));
+    const validSkip = (validCurrentPage - 1) * perPage;
+
+    // Get posts with pagination and sorting
     const posts = await Post.find(filter)
+      .sort(sortOption)
+      .skip(validSkip)
+      .limit(perPage)
       .populate("posted_by", "name email")
       .populate("category")
       .populate("restaurant_details.category");
@@ -67,7 +108,14 @@ postController.getAllPosts = async (req, res, next) => {
       res,
       200,
       true,
-      posts,
+      {
+        postType: post_type,
+        posts,
+        currentPage: validCurrentPage,
+        totalPages,
+        perPage: Number(perPage),
+        totalPosts,
+      },
       null,
       "Successfully found list of Posts"
     );
@@ -92,14 +140,7 @@ postController.getPostById = async (req, res, next) => {
       throw new AppError(404, "Not Found", "Post not found");
     }
 
-    sendResponse(
-      res,
-      200,
-      true,
-      { data: post },
-      null,
-      "Successfully found Post"
-    );
+    sendResponse(res, 200, true, post, null, "Successfully found Post");
   } catch (err) {
     next(err);
   }
@@ -148,6 +189,47 @@ postController.deletePost = async (req, res, next) => {
     }
 
     sendResponse(res, 200, true, updated, null, "Successfully deleted Post");
+  } catch (err) {
+    next(err);
+  }
+};
+
+//Get Post by Slug
+postController.getPostBySlug = async (req, res, next) => {
+  const { slug } = req.params;
+
+  try {
+    if (!slug) throw new AppError(400, "Bad Request", "Slug is required");
+
+    const post = await Post.findOne({ slug, isDeleted: false })
+      .populate("posted_by", "name email")
+      .populate("category")
+      .populate("restaurant_details.category");
+
+    if (!post) {
+      throw new AppError(404, "Not Found", "Post not found");
+    }
+
+    // Find 2 relevant posts of the same post_type
+    const relevantPosts = await Post.find({
+      post_type: post.post_type,
+      _id: { $ne: post._id }, // Exclude the current post
+      isDeleted: false,
+    })
+      .sort({ createdAt: -1 }) // Get the most recent ones
+      .limit(3)
+      .populate("posted_by", "name email")
+      .populate("category")
+      .populate("restaurant_details.category");
+
+    sendResponse(
+      res,
+      200,
+      true,
+      { post, relevantPosts },
+      null,
+      "Successfully found Post with relevant suggestions"
+    );
   } catch (err) {
     next(err);
   }
