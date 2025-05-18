@@ -4,7 +4,7 @@ const postSchema = new mongoose.Schema({
   slug: { type: String, unique: true },
   post_type: {
     type: String,
-    enum: ["news", "event", "restaurant"],
+    enum: ["news", "events", "restaurants"],
     required: true,
   },
   posted_by: {
@@ -12,6 +12,7 @@ const postSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
+  title: String,
   content: String,
   image: String,
   tags: [String],

@@ -9,11 +9,13 @@ postController.createPost = async (req, res, next) => {
   const {
     post_type,
     content,
+    title,
     image,
     tags,
     category,
     event_details,
     restaurant_details,
+    slug,
   } = req.body;
   const posted_by = req.userId; // Assuming userId is set in the auth middleware
 
@@ -29,6 +31,8 @@ postController.createPost = async (req, res, next) => {
     const newPost = {
       post_type,
       posted_by,
+      slug,
+      title,
       content: content || "",
       image: image || "",
       tags: tags || [],
@@ -39,14 +43,7 @@ postController.createPost = async (req, res, next) => {
     };
 
     const created = await Post.create(newPost);
-    sendResponse(
-      res,
-      201,
-      true,
-      { data: created },
-      null,
-      "Successfully Created Post"
-    );
+    sendResponse(res, 201, true, created, null, "Successfully Created Post");
   } catch (err) {
     next(err);
   }
@@ -70,7 +67,7 @@ postController.getAllPosts = async (req, res, next) => {
       res,
       200,
       true,
-      { data: posts },
+      posts,
       null,
       "Successfully found list of Posts"
     );
@@ -126,14 +123,7 @@ postController.updatePost = async (req, res, next) => {
       throw new AppError(404, "Not Found", "Post not found");
     }
 
-    sendResponse(
-      res,
-      200,
-      true,
-      { data: updated },
-      null,
-      "Successfully updated Post"
-    );
+    sendResponse(res, 200, true, updated, null, "Successfully updated Post");
   } catch (err) {
     next(err);
   }
@@ -157,14 +147,7 @@ postController.deletePost = async (req, res, next) => {
       throw new AppError(404, "Not Found", "Post not found");
     }
 
-    sendResponse(
-      res,
-      200,
-      true,
-      { data: updated },
-      null,
-      "Successfully deleted Post"
-    );
+    sendResponse(res, 200, true, updated, null, "Successfully deleted Post");
   } catch (err) {
     next(err);
   }

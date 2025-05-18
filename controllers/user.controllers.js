@@ -134,14 +134,7 @@ userController.getUserById = async (req, res, next) => {
       throw new AppError(404, "Not Found", "User not found");
     }
 
-    sendResponse(
-      res,
-      200,
-      true,
-      { data: user },
-      null,
-      "Successfully found User"
-    );
+    sendResponse(res, 200, true, user, null, "Successfully found User");
   } catch (err) {
     next(err);
   }
@@ -173,14 +166,7 @@ userController.updateUser = async (req, res, next) => {
       throw new AppError(404, "Not Found", "User not found");
     }
 
-    sendResponse(
-      res,
-      200,
-      true,
-      { data: updated },
-      null,
-      "Successfully updated User"
-    );
+    sendResponse(res, 200, true, updated, null, "Successfully updated User");
   } catch (err) {
     next(err);
   }

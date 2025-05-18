@@ -24,4 +24,8 @@ router.post("/login", userController.login);
  */
 router.get("/me", loginRequired, userController.getCurrentUser);
 
+router.get("/:id", userController.getUserById);
+
+router.put("/:id", userController.updateUser);
+
 module.exports = router;
