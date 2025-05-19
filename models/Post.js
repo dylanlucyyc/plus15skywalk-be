@@ -15,7 +15,7 @@ const postSchema = new mongoose.Schema({
   title: String,
   content: String,
   image: String,
-  tags: [String],
+  tags: String,
   category: { type: mongoose.Schema.Types.ObjectId, ref: "Category" },
   created_at: { type: Date, default: Date.now },
 
@@ -29,12 +29,14 @@ const postSchema = new mongoose.Schema({
   restaurant_details: {
     longitude: Number,
     latitude: Number,
-    category: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "RestaurantCategory",
-      },
-    ],
+    address: String,
+    opening_hours: String,
+    // category: [
+    //   {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: "RestaurantCategory",
+    //   },
+    // ],
     price_range: {
       type: String,
       enum: ["$", "$$", "$$$", "$$$$"],

@@ -12,7 +12,6 @@ postController.createPost = async (req, res, next) => {
     title,
     image,
     tags,
-    category,
     event_details,
     restaurant_details,
     slug,
@@ -36,7 +35,6 @@ postController.createPost = async (req, res, next) => {
       content: content || "",
       image: image || "",
       tags: tags || [],
-      category,
       event_details: post_type === "event" ? event_details : undefined,
       restaurant_details:
         post_type === "restaurant" ? restaurant_details : undefined,
@@ -55,7 +53,6 @@ postController.getAllPosts = async (req, res, next) => {
     const filter = { isDeleted: false };
     const {
       post_type,
-      category,
       page = 1,
       per_page = 10,
       filter: filterType = "all",
@@ -65,7 +62,6 @@ postController.getAllPosts = async (req, res, next) => {
 
     // Apply filters
     if (post_type) filter.post_type = post_type;
-    if (category) filter.category = category;
     if (search) {
       filter.title = { $regex: search, $options: "i" }; // Case-insensitive search
     }
@@ -100,9 +96,7 @@ postController.getAllPosts = async (req, res, next) => {
       .sort(sortOption)
       .skip(validSkip)
       .limit(perPage)
-      .populate("posted_by", "name email")
-      .populate("category")
-      .populate("restaurant_details.category");
+      .populate("posted_by", "name email");
 
     sendResponse(
       res,
@@ -131,10 +125,10 @@ postController.getPostById = async (req, res, next) => {
   try {
     if (!id) throw new AppError(400, "Bad Request", "Post ID is required");
 
-    const post = await Post.findOne({ _id: id, isDeleted: false })
-      .populate("posted_by", "name email")
-      .populate("category")
-      .populate("restaurant_details.category");
+    const post = await Post.findOne({ _id: id, isDeleted: false }).populate(
+      "posted_by",
+      "name email"
+    );
 
     if (!post) {
       throw new AppError(404, "Not Found", "Post not found");
@@ -155,10 +149,11 @@ postController.updatePost = async (req, res, next) => {
   try {
     if (!id) throw new AppError(400, "Bad Request", "Post ID is required");
 
-    const updated = await Post.findByIdAndUpdate(id, updateInfo, options)
-      .populate("posted_by", "name email")
-      .populate("category")
-      .populate("restaurant_details.category");
+    const updated = await Post.findByIdAndUpdate(
+      id,
+      updateInfo,
+      options
+    ).populate("posted_by", "name email");
 
     if (!updated) {
       throw new AppError(404, "Not Found", "Post not found");
@@ -201,10 +196,10 @@ postController.getPostBySlug = async (req, res, next) => {
   try {
     if (!slug) throw new AppError(400, "Bad Request", "Slug is required");
 
-    const post = await Post.findOne({ slug, isDeleted: false })
-      .populate("posted_by", "name email")
-      .populate("category")
-      .populate("restaurant_details.category");
+    const post = await Post.findOne({ slug, isDeleted: false }).populate(
+      "posted_by",
+      "name email"
+    );
 
     if (!post) {
       throw new AppError(404, "Not Found", "Post not found");
@@ -218,9 +213,7 @@ postController.getPostBySlug = async (req, res, next) => {
     })
       .sort({ createdAt: -1 }) // Get the most recent ones
       .limit(3)
-      .populate("posted_by", "name email")
-      .populate("category")
-      .populate("restaurant_details.category");
+      .populate("posted_by", "name email");
 
     sendResponse(
       res,
@@ -230,6 +223,24 @@ postController.getPostBySlug = async (req, res, next) => {
       null,
       "Successfully found Post with relevant suggestions"
     );
+  } catch (err) {
+    next(err);
+  }
+};
+
+//Get Post by User
+postController.getPostByUser = async (req, res, next) => {
+  const { userId } = req.params;
+
+  try {
+    if (!userId) throw new AppError(400, "Bad Request", "User ID is required");
+
+    const posts = await Post.find({
+      posted_by: userId,
+      isDeleted: false,
+    }).populate("posted_by", "name email");
+
+    sendResponse(res, 200, true, posts, null, "Successfully found Posts");
   } catch (err) {
     next(err);
   }
