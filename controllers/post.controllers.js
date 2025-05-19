@@ -35,9 +35,9 @@ postController.createPost = async (req, res, next) => {
       content: content || "",
       image: image || "",
       tags: tags || [],
-      event_details: post_type === "event" ? event_details : undefined,
+      event_details: post_type === "events" ? event_details : undefined,
       restaurant_details:
-        post_type === "restaurant" ? restaurant_details : undefined,
+        post_type === "restaurants" ? restaurant_details : undefined,
     };
 
     const created = await Post.create(newPost);
