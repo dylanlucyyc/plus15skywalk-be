@@ -49,8 +49,8 @@ favoriteController.createFavorite = async (req, res, next) => {
 };
 
 //Get All Favorites for a User
-favoriteController.getAllFavorites = async (req, res, next) => {
-  const user_id = req.userId;
+favoriteController.getFavoriteUserId = async (req, res, next) => {
+  const user_id = req.params.user_id;
   const filter = { user_id, isDeleted: false };
 
   try {
@@ -69,34 +69,6 @@ favoriteController.getAllFavorites = async (req, res, next) => {
       { data: favorites },
       null,
       "Successfully found list of Favorites"
-    );
-  } catch (err) {
-    next(err);
-  }
-};
-
-//Get Favorite by ID
-favoriteController.getFavoriteById = async (req, res, next) => {
-  const { id } = req.params;
-
-  try {
-    if (!id) throw new AppError(400, "Bad Request", "Favorite ID is required");
-
-    const favorite = await Favorite.findOne({ _id: id, isDeleted: false })
-      .populate("post_id")
-      .populate("user_id", "name email");
-
-    if (!favorite) {
-      throw new AppError(404, "Not Found", "Favorite not found");
-    }
-
-    sendResponse(
-      res,
-      200,
-      true,
-      { data: favorite },
-      null,
-      "Successfully found Favorite"
     );
   } catch (err) {
     next(err);
@@ -166,6 +138,95 @@ favoriteController.deleteFavoriteByPostId = async (req, res, next) => {
       { data: updated },
       null,
       "Successfully deleted Favorite"
+    );
+  } catch (err) {
+    next(err);
+  }
+};
+
+//Check if a user has favorited a post
+favoriteController.checkFavorite = async (req, res, next) => {
+  const { post_id } = req.params;
+  const user_id = req.userId;
+
+  try {
+    if (!post_id || !user_id) {
+      throw new AppError(
+        400,
+        "Bad Request",
+        "Post ID and User ID are required"
+      );
+    }
+
+    const existingFavorite = await Favorite.findOne({
+      user_id,
+      post_id,
+      isDeleted: false,
+    });
+
+    sendResponse(
+      res,
+      200,
+      true,
+      { isFavorited: !!existingFavorite },
+      null,
+      "Successfully checked favorite status"
+    );
+  } catch (err) {
+    next(err);
+  }
+};
+
+//Get favorite count for a specific post
+favoriteController.getFavoriteCount = async (req, res, next) => {
+  const { post_id } = req.params;
+
+  try {
+    if (!post_id) {
+      throw new AppError(400, "Bad Request", "Post ID is required");
+    }
+
+    const count = await Favorite.countDocuments({
+      post_id,
+      isDeleted: false,
+    });
+
+    sendResponse(
+      res,
+      200,
+      true,
+      { count },
+      null,
+      "Successfully retrieved favorite count"
+    );
+  } catch (err) {
+    next(err);
+  }
+};
+
+//Get all users who favorited a specific post
+favoriteController.getUsersByPost = async (req, res, next) => {
+  const { post_id } = req.params;
+
+  try {
+    if (!post_id) {
+      throw new AppError(400, "Bad Request", "Post ID is required");
+    }
+
+    const favorites = await Favorite.find({
+      post_id,
+      isDeleted: false,
+    }).populate("user_id", "name email avatar");
+
+    const users = favorites.map((favorite) => favorite.user_id);
+
+    sendResponse(
+      res,
+      200,
+      true,
+      { users },
+      null,
+      "Successfully retrieved users who favorited this post"
     );
   } catch (err) {
     next(err);

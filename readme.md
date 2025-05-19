@@ -1,235 +1,161 @@
-# +15 Skywalk Website
+# +15 Skywalk - Backend API
 
-## What is +15 Skywalk?
+## Overview
 
-The +15 Skywalk is a network of elevated, climate-controlled pedestrian walkways in downtown Calgary, Alberta. Named for being approximately 15 feet above street level, the system connects over 100 buildings across 18 kilometers of pathways, making it the largest indoor pedestrian system of its kind in the world.
+This repository contains the backend API for the +15 Skywalk website, a digital platform for Calgary's extensive elevated pedestrian walkway system. The +15 Skywalk connects over 100 buildings through 18 kilometers of climate-controlled pathways, making it the world's largest indoor pedestrian network.
 
-It allows people to move comfortably between offices, shopping centers, hotels, and public buildings, especially useful during Calgary’s harsh winters. Originally developed in the 1970s, the +15 has become an iconic part of the city’s infrastructure, helping reduce street-level congestion while promoting convenience and accessibility downtown.
+## Project Purpose
 
-## What problem does this application solve?
+The +15 Skywalk platform aims to solve navigation and discovery challenges by providing:
 
-This website is a digital hub for Calgary’s +15 Skywalk system. It offers real-time information on news, events, and hospitality services connected to the +15 network. Designed for both locals and visitors, the site helps users easily navigate the extensive skywalk system, stay informed about downtown happenings, and discover nearby cafes, shops, and amenities, all in one place. At its core, the platform bridges the physical network of the +15 with a modern, intuitive digital experience.
+- A digital hub with real-time information about the walkway system
+- Easy access to news and events happening in downtown Calgary
+- A comprehensive directory of hospitality services (restaurants, cafes, shops) accessible via the +15
+- User accounts with personalized favorites for frequent visitors
 
-## What features contribute to solving given issues?
-
-### Interactive Map Integration:
-
-Users can explore an easy-to-navigate digital map of the +15, including real-time updates on walkway access, closures, and points of interest.
-
-### Event & News Feed:
-
-Curated updates keep users in the loop about downtown events, building announcements, or construction alerts affecting skywalk routes.
-
-### Hospitality Directory:
-
-A categorized list of food, retail, and services within the +15 system helps people quickly find what they need, especially during winter months.
-
-### Mobile Responsiveness:
-
-Optimized for on-the-go access, allowing users to check the map or find services while walking through the +15.
-
-## Challenges faced:
-
-### Data Limitations:
-
-As a student project with a limited timeline, I don’t have access to real-time or official +15 data. Instead, I rely on publicly available resources and manually mapped out sample routes and points of interest to simulate functionality.
-
-### Map Accuracy:
-
-Creating a representative map of such a large and complex system without detailed GIS data or official support posed a challenge. We focused on a small section of the +15 to demonstrate the concept.
-
-### Balancing Scope and Features:
-
-With limited development time, we prioritized core features like an interactive map and basic listings over full backend integration or live updates.
-
-### Tool Familiarity:
-
-Learning and implementing Mapbox for the first time required time for experimentation, especially when customizing styles and working with GeoJSON data.
-
----
-
-## User Stories
-
-### Background
-
-+15 Connect is a web-based platform that helps users explore Calgary’s +15 Skywalk system. Visitors can browse an interactive map of the walkways and view sample points of interest, including restaurants and cafes.
-
-Users can sign up by providing a name, email, and password. The email must be unique to the system. After signing in, users can favorite restaurants or hospitality venues they like. These favorites are saved to their profile, allowing quick access the next time they visit the site.
-
-The platform also features a basic Events section and news updates relevant to the +15 system. While real-time data is not available, the site simulates how future features like walkway closure alerts, traffic levels, and accessibility tools could be integrated.
-
-In future versions, +15 Connect could expand user profiles to include saved routes, accessibility preferences, and notification settings for event updates or closures. Additionally, I am also planning to implement the UI for the CMS system to further optimize the data input process.
-
----
-
-### Authentication & Users
-
-- **As a new user**, I want to create an account using my name, email, and password, so that I can save favorites and personalize my experience.
-- **As a system**, I want to ensure no two users can register with the same email, so that account integrity is maintained.
-- **As a system**, I want to encrypt user passwords before storing them in the database, so that user credentials are protected from unauthorized access.
-- **As a returning user**, I want to log in using my email and password, so that I can access my saved favorites.
-- **As a logged-in user**, I want to log out of my account, so that I can end my session securely.
-
-### Favorites Feature
-
-- **As a logged-in user**, I want to mark a restaurant as a favorite, so that I can easily find it later.
-- **As a logged-in user**, I want to view a list of my favorite places, so that I can quickly access the restaurants I like.
-- **As a logged-in user**, I want to remove a restaurant from my favorites, so that I can update my preferences.
-
-### Interactive Map
-
-- **As a user**, I want to explore an interactive map of the +15 Skywalk, so that I can understand how the walkways connect across downtown.
-- **As a user**, I want to see restaurants displayed on the map, so that I can plan where to go.
+## Features
 
 ### Hospitality Directory
 
-- **As a user**, I want to see a list of restaurants and hospitality venues, so that I can choose where to eat or relax.
-- **As a user**, I want to click on a restaurant and view more information (e.g., hours, location, summary), so that I can decide if it meets my needs.
+- Categorized listings of restaurants and services
+- Detailed information including hours, location, and descriptions
+- User favoriting functionality
 
-### Events & News
+### Event & News Management
 
-- **As a user**, I want to browse a list of events happening along or near the +15 network, so that I can plan my visit around activities.
-- **As a user**, I want to read news updates related to the +15 (e.g., closures, new businesses), so that I stay informed.
+- Downtown events listing
+- News updates about the +15 system
+- Categorized content organization
 
----
+### Authentication System
+
+- User registration and login
+- Password encryption
+- Profile management
+- Favorites feature
+
+## Tech Stack
+
+- **Runtime**: Node.js
+- **Framework**: Express.js
+- **Database**: MongoDB with Mongoose ODM
+- **Authentication**: JWT with bcrypt password encryption
+- **Development**: Nodemon for hot reloading
 
 ## API Endpoints
 
-### News Endpoints
+### Authentication
 
-```js
-/**
- * @route GET /api/news
- * @description Get all news posts with optional filters
- * @query {page, limit, search, tag, sort}
- * @access Public
- */
-
-/**
- * @route GET /api/news/:slug
- * @description Get single news post by slug
- * @access Public
- */
-
-/**
- * @route POST /api/news
- * @description Create a new news post
- * @body {title, description, image, tags, etc.}
- * @access Private
- */
-
-/**
- * @route PUT /api/news/:id
- * @description Update an existing news post
- * @body {title, description, image, tags, etc.}
- * @access Private
- */
-
-/**
- * @route DELETE /api/news/:id
- * @description Delete a news post by ID
- * @access Private
- */
+```
+POST /api/user/signup   - Create a new user account
+POST /api/user/signin   - Log in with email and password
+GET  /api/user/me       - Get current authenticated user
 ```
 
-### Events Endpoints
+### Posts (News/Events/Restaurants)
 
-```js
-/**
- * @route GET /api/events
- * @description Get all events with optional filters
- * @query {page, limit, search, category, sort}
- * @access Public
- */
-
-/**
- * @route GET /api/events/:slug
- * @description Get single event by slug
- * @access Public
- */
-
-/**
- * @route POST /api/events
- * @description Create a new event
- * @body {title, description, date, location, etc.}
- * @access Private
- */
-
-/**
- * @route PUT /api/events/:id
- * @description Update an existing event
- * @body {title, description, date, location, etc.}
- * @access Private
- */
-
-/**
- * @route DELETE /api/events/:id
- * @description Delete an event by ID
- * @access Private
- */
+```
+GET    /api/posts               - Get all posts with filters
+GET    /api/posts/:slug         - Get single post by slug
+POST   /api/posts               - Create a new post (protected)
+PUT    /api/posts/:id           - Update an existing post (protected)
+DELETE /api/posts/:id           - Delete a post (protected)
 ```
 
-### Restaurants Endpoints
+### Favorites
 
-```js
-/**
- * @route GET /api/restaurants
- * @description Get all restaurants with optional filters
- * @query {page, limit, search, rating, sort}
- * @access Public
- */
-
-/**
- * @route GET /api/restaurants/:slug
- * @description Get single restaurant by slug
- * @access Public
- */
-
-/**
- * @route POST /api/restaurants
- * @description Create a new restaurant
- * @body {name, description, rating, image, etc.}
- * @access Private
- */
-
-/**
- * @route PUT /api/restaurants/:id
- * @description Update an existing restaurant
- * @body {name, description, rating, image, etc.}
- * @access Private
- */
-
-/**
- * @route DELETE /api/restaurants/:id
- * @description Delete a restaurant by ID
- * @access Private
- */
+```
+GET    /api/favorites           - Get user's favorites
+POST   /api/favorites           - Add an item to favorites
+DELETE /api/favorites/:id       - Remove from favorites
 ```
 
-### Authentication Endpoints
+### Subscribers
 
-```js
-/**
- * @route POST /api/auth/signup
- * @description Create a new user account
- * @body {email, password}
- * @access Public
- */
-
-/**
- * @route POST /api/auth/signin
- * @description Log in with email and password
- * @body {email, password}
- * @access Public
- */
-
-/**
- * @route GET /api/auth/me
- * @description Get current authenticated user info
- * @access Private
- */
 ```
+POST   /api/subscribers         - Add a new subscriber
+```
+
+## Data Models
+
+### User
+
+- name
+- email (unique)
+- password_hash
+- avatar_url
+- created_at
+- isDeleted
+
+### Post
+
+- slug (unique)
+- post_type (news, events, restaurants)
+- posted_by (User reference)
+- title
+- content
+- image
+- tags
+- category (reference)
+- created_at
+- event_details (conditional)
+- restaurant_details (conditional)
+- isDeleted
+
+### Favorite
+
+- user (User reference)
+- post (Post reference)
+- created_at
+
+### Subscriber
+
+- email
+- subscribed_at
+
+## Development Challenges
+
+- **Data Limitations**: As a student project, access to real-time or official +15 data was limited
+- **Scope Management**: Balancing feature development with timeline constraints
 
 ## Entity Relationship Diagram
 
 ![Entity Relationship Diagram](erd-diagram.png)
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v14+)
+- MongoDB
+
+### Installation
+
+```bash
+# Clone the repository
+git clone [repository-url]
+
+# Install dependencies
+npm install
+
+# Create .env file with the following variables
+MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret
+
+# Start development server
+npm run dev
+```
+
+### Production
+
+```bash
+npm start
+```
+
+## Future Enhancements
+
+- Real-time walkway access and closure updates
+- Traffic level indicators
+- Enhanced user profiles with saved routes
+- Mobile application version
+- CMS interface for content management
